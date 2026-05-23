@@ -222,13 +222,13 @@ function notion_save_audit($invoiceId, $workshop, $totalInvoiced, $totalCorrect,
                 ]
             ],
             'Discrepancias' => [
-                'rich_text' => [
-                    [
+                'rich_text' => array_map(function($chunk) {
+                    return [
                         'text' => [
-                            'content' => strlen($discrepanciesJson) > 2000 ? substr($discrepanciesJson, 0, 1997) . '...' : $discrepanciesJson
+                            'content' => $chunk
                         ]
-                    ]
-                ]
+                    ];
+                }, str_split($discrepanciesJson, 2000))
             ]
         ]
     ];
@@ -286,7 +286,13 @@ function notion_get_historial() {
                 
                 $discrepancias = '[]';
                 if (!empty($props['Discrepancias']['rich_text'])) {
-                    $discrepancias = $props['Discrepancias']['rich_text'][0]['plain_text'];
+                    $discrepanciasText = '';
+                    foreach ($props['Discrepancias']['rich_text'] as $rt) {
+                        $discrepanciasText .= $rt['plain_text'];
+                    }
+                    if (!empty($discrepanciasText)) {
+                        $discrepancias = $discrepanciasText;
+                    }
                 }
                 
                 $historial[] = [

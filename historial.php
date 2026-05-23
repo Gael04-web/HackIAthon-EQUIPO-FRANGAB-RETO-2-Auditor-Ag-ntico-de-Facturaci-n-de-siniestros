@@ -244,9 +244,15 @@ foreach ($historial as $item) {
                                                         🔍 Detalle de Anomalías y Discrepancias Detectadas
                                                     </h4>
                                                     <?php if (empty($anomalias)): ?>
-                                                        <p style="font-size: 0.85rem; color: var(--color-success); font-weight: 500;">
-                                                            ✅ Esta factura está alineada al 100% con el tarifario de referencia. No se hallaron discrepancias.
-                                                        </p>
+                                                        <?php if ($row['ahorro_detectado'] > 0): ?>
+                                                            <p style="font-size: 0.85rem; color: var(--color-warning); font-weight: 500;">
+                                                                ⚠️ Se detectó un ahorro de $<?php echo number_format($row['ahorro_detectado'], 2); ?> pero el detalle de las anomalías no pudo ser procesado o no está disponible (formato inválido en registros antiguos).
+                                                            </p>
+                                                        <?php else: ?>
+                                                            <p style="font-size: 0.85rem; color: var(--color-success); font-weight: 500;">
+                                                                ✅ Esta factura está alineada al 100% con el tarifario de referencia. No se hallaron discrepancias.
+                                                            </p>
+                                                        <?php endif; ?>
                                                     <?php else: ?>
                                                         <div class="table-container" style="background-color: #ffffff; border-color: #cbd5e1; max-height: none;">
                                                             <table style="font-size: 0.8rem;">
