@@ -9,14 +9,12 @@ require_once __DIR__ . '/../config.php';
 /**
  * Llama a la API de Google Gemini para auditar una factura contra el tarifario
  */
-function gemini_audit_invoice($invoice, $tarifario) {
+function gemini_audit_invoice($invoiceData, $tarifario) {
     if (DEMO_MODE) {
-        $invoiceId = $invoice['id'];
-        if (isset(MOCK_GEMINI_AUDITS[$invoiceId])) {
-            return MOCK_GEMINI_AUDITS[$invoiceId];
-        }
-        // Fallback genérico por si no coincide la factura
+        // En modo demo, retornamos una simulación genérica
         return [
+            'id_factura' => 'FACT-DEMO-001',
+            'taller_nombre' => 'Taller Demo (Multimodal)',
             'total_facturado' => 100.00,
             'total_correcto' => 100.00,
             'ahorro_detectado' => 0.00,
@@ -48,6 +46,8 @@ REGLAS DE AUDITORÍA:
 
 Debes retornar obligatoriamente un objeto JSON que coincida exactamente con esta estructura:
 {
+  \"id_factura\": \"Extrae el número de factura. Si no encuentras, genera uno como 'FACT-DESCONOCIDA'\",
+  \"taller_nombre\": \"Extrae el nombre del taller mecánico. Si no encuentras, pon 'Taller Desconocido'\",
   \"total_facturado\": 0.00,
   \"total_correcto\": 0.00,
   \"ahorro_detectado\": 0.00,
@@ -71,8 +71,24 @@ Debes retornar obligatoriamente un objeto JSON que coincida exactamente con esta
   ]
 }";
 
-    $userPrompt = "Factura del taller a auditar:\n" . json_encode($invoice, JSON_UNESCAPED_UNICODE) . "\n\n" .
+    $userPromptText = "A continuación se proporciona la factura a auditar (puede venir como texto o como archivo adjunto multimodal) y el tarifario de referencia autorizado.\n\n" .
                   "Tarifario de referencia autorizado:\n" . json_encode($tarifario, JSON_UNESCAPED_UNICODE);
+
+    $parts = [];
+    $parts[] = ['text' => $userPromptText];
+
+    // Adjuntar la factura según el tipo
+    if ($invoiceData['type'] === 'text') {
+        $parts[] = ['text' => "\n\nTexto de la Factura digitada por el usuario:\n" . $invoiceData['content']];
+    } elseif ($invoiceData['type'] === 'file') {
+        $parts[] = ['text' => "\n\nArchivo de Factura adjunto."];
+        $parts[] = [
+            'inlineData' => [
+                'mimeType' => $invoiceData['mime'],
+                'data' => $invoiceData['base64']
+            ]
+        ];
+    }
 
     // Endpoint de Google Gemini API
     $url = "https://generativelanguage.googleapis.com/v1beta/models/" . GEMINI_MODEL . ":generateContent?key=" . GEMINI_API_KEY;
@@ -80,9 +96,7 @@ Debes retornar obligatoriamente un objeto JSON que coincida exactamente con esta
     $payload = [
         'contents' => [
             [
-                'parts' => [
-                    ['text' => $userPrompt]
-                ]
+                'parts' => $parts
             ]
         ],
         'systemInstruction' => [

@@ -82,59 +82,35 @@ $tarifario_count = count($tarifario);
             <?php endif; ?>
 
             <div class="grid-2col">
-                <!-- Columna Izquierda: Selección de Facturas -->
+                <!-- Columna Izquierda: Carga de Factura -->
                 <section class="card animate-fade-in" style="animation-delay: 0.1s;">
                     <div class="card-header">
-                        <h2>Facturas de Taller Recibidas</h2>
-                        <p>Selecciona una de las facturas enviadas por los talleres mecánicos para iniciar la auditoría automática con IA.</p>
+                        <h2>Auditar Factura del Taller</h2>
+                        <p>Sube una imagen, un PDF o digita el detalle de la factura para iniciar la auditoría automática con IA.</p>
                     </div>
                     <div class="card-body">
-                        <div class="invoices-selector">
-                            <?php foreach (FACTURAS_EJEMPLO as $key => $factura): ?>
-                                <?php 
-                                    // Calcular el total de la factura
-                                    $total_fac = 0;
-                                    foreach ($factura['items'] as $item) {
-                                        $total_fac += $item['cantidad'] * $item['precio_unitario'];
-                                    }
-                                ?>
-                                <div class="invoice-option" data-invoice="<?php echo htmlspecialchars(json_encode($factura)); ?>">
-                                    <input type="radio" name="invoice_id_radio" value="<?php echo $key; ?>" class="hidden-radio">
-                                    <div class="invoice-option-header">
-                                        <span class="invoice-option-title"><?php echo htmlspecialchars($factura['id']); ?></span>
-                                        <span class="price">$<?php echo number_format($total_fac, 2); ?></span>
-                                    </div>
-                                    <div class="invoice-option-taller">🏢 Taller: <?php echo htmlspecialchars($factura['taller']); ?></div>
-                                    <div style="font-size: 0.8em; color: var(--text-secondary); margin-top: 5px;">📅 Fecha: <?php echo htmlspecialchars($factura['fecha']); ?></div>
-                                    <div class="invoice-option-error" style="margin-top: 10px;">
-                                        <strong>Falla de control sembrada:</strong> <?php echo htmlspecialchars($factura['descripcion_error']); ?>
-                                    </div>
+                        <form id="audit-form" method="POST" action="auditar.php" enctype="multipart/form-data">
+                            
+                            <div class="upload-zone" style="background-color: #f8fafc; border: 2px dashed var(--color-accent-blue); border-radius: var(--border-radius-md); padding: 30px 20px; transition: all 0.3s ease; text-align: center; margin-bottom: 20px;">
+                                <div style="margin-bottom: 15px;">
+                                    <span style="font-size: 3rem;">📄</span>
+                                    <h3 style="margin-top: 10px; font-weight: 600; color: var(--color-navy-dark);">Subir Factura</h3>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Formatos soportados: PDF, JPG, PNG (Max 5MB)</p>
                                 </div>
-                            <?php endforeach; ?>
-                        </div>
+                                <input type="file" name="invoice_file" id="invoice_file" accept=".pdf,image/png,image/jpeg,image/jpg" style="max-width: 100%; margin: 0 auto; display: block;">
+                            </div>
 
-                        <!-- Visor de Factura Seleccionada -->
-                        <div class="active-invoice-viewer">
-                            <div class="viewer-header">
-                                <span class="viewer-title">Detalle de Factura Seleccionada</span>
-                                <span style="font-size: 0.8rem; color: var(--text-muted);">Vista Previa</span>
+                            <div style="text-align: center; margin: 20px 0; color: var(--text-muted); font-weight: 600; font-size: 0.9rem;">
+                                — O EN SU LUGAR —
                             </div>
-                            <div id="active-invoice-items" class="viewer-items">
-                                <p style="color: var(--text-muted); text-align: center; font-size: 0.9rem; padding: 20px 0;">
-                                    Ninguna factura seleccionada. Elige una de arriba.
-                                </p>
-                            </div>
-                            <div class="viewer-total-row">
-                                <span>Total Facturado:</span>
-                                <span id="active-invoice-total">$0.00</span>
-                            </div>
-                        </div>
 
-                        <!-- Formulario de Envío a Auditoría -->
-                        <form id="audit-form" method="POST" action="auditar.php">
-                            <input type="hidden" name="invoice_id" id="selected-invoice-id" value="">
-                            <button type="submit" id="btn-auditar" class="btn btn-primary btn-block btn-lg" disabled>
-                                🔍 Selecciona una factura
+                            <div class="manual-input-zone" style="margin-bottom: 25px;">
+                                <label for="invoice_text" style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--color-navy-dark);">Digitar datos manualmente:</label>
+                                <textarea name="invoice_text" id="invoice_text" rows="5" placeholder="Ej: Taller Norte, Factura #123. Cambio de pastillas freno delanteras, 1 unidad, $65.00..." style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); font-family: inherit; resize: vertical; color: var(--text-primary);"></textarea>
+                            </div>
+
+                            <button type="submit" id="btn-auditar" class="btn btn-primary btn-block btn-lg">
+                                🔍 Iniciar Auditoría Agéntica
                             </button>
                         </form>
                     </div>

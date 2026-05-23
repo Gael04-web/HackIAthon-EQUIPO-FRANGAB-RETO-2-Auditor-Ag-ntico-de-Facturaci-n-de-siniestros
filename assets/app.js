@@ -4,69 +4,36 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Selección Interactiva de Facturas
-    const invoiceCards = document.querySelectorAll('.invoice-option');
-    const viewerContainer = document.getElementById('active-invoice-items');
-    const viewerTotal = document.getElementById('active-invoice-total');
-    const formInvoiceInput = document.getElementById('selected-invoice-id');
+    // 1. Validación de Formulario Multimodal
     const auditBtn = document.getElementById('btn-auditar');
-
-    if (invoiceCards.length > 0 && viewerContainer) {
-        invoiceCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Quitar selección previa
-                invoiceCards.forEach(c => c.classList.remove('selected'));
-                
-                // Agregar clase al seleccionado
-                card.classList.add('selected');
-                
-                // Activar radio button interno
-                const radio = card.querySelector('.hidden-radio');
-                if (radio) {
-                    radio.checked = true;
-                    formInvoiceInput.value = radio.value;
-                }
-
-                // Cargar datos del atributo data-invoice
-                const invoiceData = JSON.parse(card.getAttribute('data-invoice'));
-                updateInvoiceViewer(invoiceData);
-                
-                // Habilitar botón de auditoría
-                if (auditBtn) {
-                    auditBtn.removeAttribute('disabled');
-                    auditBtn.innerText = `🔍 Auditar Factura ${invoiceData.id}`;
-                }
-            });
+    const fileInput = document.getElementById('invoice_file');
+    const textInput = document.getElementById('invoice_text');
+    
+    // Activar estilo al arrastrar archivo sobre la zona
+    const uploadZone = document.querySelector('.upload-zone');
+    if (uploadZone && fileInput) {
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                uploadZone.style.backgroundColor = 'var(--color-accent-blue-soft)';
+                uploadZone.style.borderColor = 'var(--color-accent-blue)';
+                // Limpiar el text input si se sube archivo
+                if (textInput) textInput.value = '';
+            } else {
+                uploadZone.style.backgroundColor = '#f8fafc';
+            }
         });
     }
 
-    // Actualiza la vista previa de la factura seleccionada
-    function updateInvoiceViewer(invoice) {
-        viewerContainer.innerHTML = '';
-        let total = 0;
-
-        invoice.items.forEach(item => {
-            const subtotal = item.cantidad * item.precio_unitario;
-            total += subtotal;
-
-            const row = document.createElement('div');
-            row.className = 'viewer-item-row animate-fade-in';
-            row.innerHTML = `
-                <div>
-                    <span class="badge badge-code">${item.codigo}</span>
-                    <span class="viewer-item-desc">${item.descripcion}</span>
-                </div>
-                <div class="viewer-item-details">
-                    ${item.cantidad} ${item.unidad} x $${item.precio_unitario.toFixed(2)}
-                </div>
-                <div class="viewer-item-price">
-                    $${subtotal.toFixed(2)}
-                </div>
-            `;
-            viewerContainer.appendChild(row);
+    if (textInput && fileInput) {
+        textInput.addEventListener('input', () => {
+            if (textInput.value.trim().length > 0) {
+                // Limpiar file input si se escribe texto (previene enviar ambos y confundir backend)
+                fileInput.value = '';
+                if(uploadZone) {
+                    uploadZone.style.backgroundColor = '#f8fafc';
+                }
+            }
         });
-
-        viewerTotal.innerText = `$${total.toFixed(2)}`;
     }
 
     // 2. Animación del Cargador de Auditoría Agéntica
@@ -76,6 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (auditForm && loaderOverlay && loaderSubtext) {
         auditForm.addEventListener('submit', (e) => {
+            if (!fileInput.value && (!textInput.value || textInput.value.trim() === '')) {
+                e.preventDefault();
+                alert('Por favor, sube un archivo o digita los datos de la factura antes de auditar.');
+                return;
+            }
+
             e.preventDefault(); // Detener el envío temporalmente para la animación
 
             // Mostrar el loader

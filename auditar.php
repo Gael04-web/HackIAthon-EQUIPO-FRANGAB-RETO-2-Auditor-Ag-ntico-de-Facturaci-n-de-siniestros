@@ -8,19 +8,37 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/lib/notion.php';
 require_once __DIR__ . '/lib/gemini.php';
 
-// Validar que se reciba una factura válida
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['invoice_id'])) {
+// Validar que se reciba un archivo o texto
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.php');
     exit;
 }
 
-$invoice_key = $_POST['invoice_id'];
+$invoiceData = null;
 
-if (!isset(FACTURAS_EJEMPLO[$invoice_key])) {
-    die("Error: Factura seleccionada no válida.");
+// Prioridad 1: Archivo subido
+if (isset($_FILES['invoice_file']) && $_FILES['invoice_file']['error'] === UPLOAD_ERR_OK) {
+    $fileTmpPath = $_FILES['invoice_file']['tmp_name'];
+    $mimeType = $_FILES['invoice_file']['type'];
+    $fileData = file_get_contents($fileTmpPath);
+    
+    $invoiceData = [
+        'type' => 'file',
+        'mime' => $mimeType,
+        'base64' => base64_encode($fileData)
+    ];
+} 
+// Prioridad 2: Texto digitado
+elseif (!empty($_POST['invoice_text'])) {
+    $invoiceData = [
+        'type' => 'text',
+        'content' => trim($_POST['invoice_text'])
+    ];
+} 
+else {
+    die("Error: Debes subir un archivo o digitar la factura.");
 }
 
-$invoice = FACTURAS_EJEMPLO[$invoice_key];
 $audit_result = null;
 $error_ia = null;
 $error_notion_save = null;
@@ -36,7 +54,7 @@ try {
 
 // 2. Ejecutar Auditoría con la IA (Google Gemini)
 try {
-    $audit_result = gemini_audit_invoice($invoice, $tarifario);
+    $audit_result = gemini_audit_invoice($invoiceData, $tarifario);
 } catch (Exception $e) {
     $error_ia = $e->getMessage();
 }
@@ -45,8 +63,8 @@ try {
 if ($audit_result !== null) {
     try {
         $saved_in_notion = notion_save_audit(
-            $invoice['id'],
-            $invoice['taller'],
+            $audit_result['id_factura'] ?? 'FACT-DESCONOCIDA',
+            $audit_result['taller_nombre'] ?? 'Taller Desconocido',
             $audit_result['total_facturado'],
             $audit_result['total_correcto'],
             $audit_result['ahorro_detectado'],
@@ -65,7 +83,7 @@ if ($audit_result !== null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Auditoría - <?php echo htmlspecialchars($invoice['id']); ?></title>
+    <title>Reporte de Auditoría Agéntica</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,8 +145,8 @@ if ($audit_result !== null) {
                     <div class="metrics-row animate-fade-in" style="animation-delay: 0.05s;">
                         <div class="metric-card">
                             <span class="metric-label">Factura Auditada</span>
-                            <span class="metric-val" style="font-size: 1.5rem; color: var(--color-navy-light);"><?php echo htmlspecialchars($invoice['id']); ?></span>
-                            <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">🏢 <?php echo htmlspecialchars($invoice['taller']); ?></span>
+                            <span class="metric-val" style="font-size: 1.5rem; color: var(--color-navy-light);"><?php echo htmlspecialchars($audit_result['id_factura'] ?? 'FACT-DESCONOCIDA'); ?></span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">🏢 <?php echo htmlspecialchars($audit_result['taller_nombre'] ?? 'Taller Desconocido'); ?></span>
                         </div>
 
                         <div class="metric-card">
