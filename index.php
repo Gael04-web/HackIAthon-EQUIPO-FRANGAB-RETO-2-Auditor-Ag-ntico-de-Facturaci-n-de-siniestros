@@ -98,6 +98,12 @@ $tarifario_count = count($tarifario);
                                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">Formatos soportados: PDF, JPG, PNG (Max 5MB)</p>
                                 </div>
                                 <input type="file" name="invoice_file" id="invoice_file" accept=".pdf,image/png,image/jpeg,image/jpg" style="max-width: 100%; margin: 0 auto; display: block;">
+                                
+                                <!-- Contenedor de Vista Previa -->
+                                <div id="file-preview-container" style="display: none; margin-top: 20px;">
+                                    <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">Vista Previa:</div>
+                                    <div id="file-preview-content" style="border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); overflow: hidden; max-height: 250px; display: inline-block; background-color: #fff;"></div>
+                                </div>
                             </div>
 
                             <div style="text-align: center; margin: 20px 0; color: var(--text-muted); font-weight: 600; font-size: 0.9rem;">

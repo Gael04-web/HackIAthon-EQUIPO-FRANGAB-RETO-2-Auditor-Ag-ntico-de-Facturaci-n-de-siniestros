@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('invoice_file');
     const textInput = document.getElementById('invoice_text');
     
-    // Activar estilo al arrastrar archivo sobre la zona
+    // Activar estilo al arrastrar archivo sobre la zona y mostrar vista previa
     const uploadZone = document.querySelector('.upload-zone');
+    const previewContainer = document.getElementById('file-preview-container');
+    const previewContent = document.getElementById('file-preview-content');
+
     if (uploadZone && fileInput) {
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
@@ -18,8 +21,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 uploadZone.style.borderColor = 'var(--color-accent-blue)';
                 // Limpiar el text input si se sube archivo
                 if (textInput) textInput.value = '';
+
+                // Mostrar vista previa
+                const file = fileInput.files[0];
+                if (previewContainer && previewContent) {
+                    previewContainer.style.display = 'block';
+                    previewContent.innerHTML = ''; // Limpiar previo
+
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(file);
+                        img.style.maxWidth = '100%';
+                        img.style.maxHeight = '250px';
+                        img.style.objectFit = 'contain';
+                        img.style.display = 'block';
+                        previewContent.appendChild(img);
+                    } else if (file.type === 'application/pdf') {
+                        const embed = document.createElement('embed');
+                        embed.src = URL.createObjectURL(file);
+                        embed.type = 'application/pdf';
+                        embed.style.width = '100%';
+                        embed.style.height = '250px';
+                        previewContent.appendChild(embed);
+                    } else {
+                        previewContent.innerHTML = `<div style="padding: 20px; font-weight: 500; color: var(--color-navy-dark);">📎 ${file.name}</div>`;
+                    }
+                }
             } else {
                 uploadZone.style.backgroundColor = '#f8fafc';
+                if (previewContainer) previewContainer.style.display = 'none';
+                if (previewContent) previewContent.innerHTML = '';
             }
         });
     }
@@ -27,11 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (textInput && fileInput) {
         textInput.addEventListener('input', () => {
             if (textInput.value.trim().length > 0) {
-                // Limpiar file input si se escribe texto (previene enviar ambos y confundir backend)
+                // Limpiar file input y vista previa si se escribe texto
                 fileInput.value = '';
                 if(uploadZone) {
                     uploadZone.style.backgroundColor = '#f8fafc';
                 }
+                if (previewContainer) previewContainer.style.display = 'none';
+                if (previewContent) previewContent.innerHTML = '';
             }
         });
     }
