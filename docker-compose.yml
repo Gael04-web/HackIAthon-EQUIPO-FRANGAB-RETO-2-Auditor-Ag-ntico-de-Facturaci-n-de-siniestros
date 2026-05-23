@@ -1,0 +1,19 @@
+# ==============================================================================
+# DOCKER COMPOSE PARA DESARROLLO Y COMPROBACIÓN LOCAL
+# Auditor Agéntico de Facturación de Siniestros
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: auditor_agentico_app
+    ports:
+      - "8080:80"
+    volumes:
+      # Sincronizar directorio local para desarrollo interactivo sin reconstruir
+      - .:/var/www/html
+    env_file:
+      - .env
+    restart: always

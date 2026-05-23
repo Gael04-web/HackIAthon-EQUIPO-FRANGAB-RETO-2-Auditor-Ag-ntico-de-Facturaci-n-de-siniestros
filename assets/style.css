@@ -1,0 +1,1005 @@
+/* ==============================================================================
+   ESTILOS PREMIUM - AUDITOR AGÉNTICO DE FACTURACIÓN DE SINIESTROS
+   ============================================================================== */
+
+/* 1. Variables Globales y Paleta de Colores */
+:root {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --color-navy-dark: #0f172a;
+    --color-navy-medium: #1e293b;
+    --color-navy-light: #334155;
+    
+    --color-accent-blue: #2563eb;
+    --color-accent-blue-hover: #1d4ed8;
+    --color-accent-blue-soft: #eff6ff;
+    
+    --color-success: #10b981;
+    --color-success-hover: #059669;
+    --color-success-soft: #ecfdf5;
+    
+    --color-warning: #f59e0b;
+    --color-warning-hover: #d97706;
+    --color-warning-soft: #fffbeb;
+    
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-danger-soft: #fef2f2;
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --border-color: #e2e8f0;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 20px;
+    
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-premium: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+}
+
+/* 2. Reset y Estilos Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: var(--color-navy-dark);
+}
+
+a {
+    color: var(--color-accent-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-accent-blue-hover);
+}
+
+/* 3. Contenedor de la Aplicación y Layout */
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Encabezado */
+.main-header {
+    background-color: var(--color-navy-dark);
+    color: #ffffff;
+    padding: 20px 30px;
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    font-size: 2.2rem;
+}
+
+.logo-text h1 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.logo-text p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Menú de Navegación */
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-link {
+    color: #cbd5e1;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Conexión Badge */
+.connection-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.connection-badge.connected {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.connection-badge.demo {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    display: inline-block;
+}
+
+/* 4. Tarjetas y Estructura Principal */
+.main-content {
+    flex: 1;
+}
+
+.grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+@media (max-width: 1024px) {
+    .grid-2col {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-premium);
+}
+
+.card-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #fafbfc;
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.card-header p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-top: 2px;
+}
+
+.card-body {
+    padding: 25px;
+    flex: 1;
+}
+
+/* 5. Facturas de Ejemplo (Cards Interactivos) */
+.invoices-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.invoice-option {
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.invoice-option:hover {
+    border-color: var(--color-accent-blue);
+    background-color: var(--color-accent-blue-soft);
+}
+
+.invoice-option.selected {
+    border-color: var(--color-accent-blue);
+    background-color: var(--color-accent-blue-soft);
+    box-shadow: 0 0 0 1px var(--color-accent-blue);
+}
+
+.invoice-option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.invoice-option-title {
+    font-weight: 600;
+    color: var(--color-navy-dark);
+    font-size: 1rem;
+}
+
+.invoice-option-taller {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.invoice-option-error {
+    font-size: 0.8rem;
+    color: var(--color-danger);
+    background-color: var(--color-danger-soft);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    font-weight: 500;
+}
+
+/* Formulario Oculto */
+.hidden-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Visualizador de Factura Activa */
+.active-invoice-viewer {
+    background-color: #f8fafc;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.viewer-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.viewer-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-navy-light);
+}
+
+.viewer-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.viewer-item-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.viewer-item-desc {
+    font-weight: 500;
+}
+
+.viewer-item-details {
+    color: var(--text-secondary);
+}
+
+.viewer-item-price {
+    font-weight: 600;
+}
+
+.viewer-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border-top: 2px solid var(--border-color);
+    padding-top: 12px;
+    margin-top: 15px;
+}
+
+/* 6. Tabla del Tarifario y Buscador */
+.table-container {
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+th {
+    background-color: #fafbfc;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: var(--color-navy-light);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: #f8fafc;
+}
+
+.price {
+    font-weight: 600;
+    color: var(--color-navy-dark);
+}
+
+/* 7. Badges y Estados */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.badge-code {
+    background-color: #f1f5f9;
+    color: var(--color-navy-light);
+    font-family: monospace;
+    font-size: 0.8rem;
+    border: 1px solid #cbd5e1;
+}
+
+.badge-category.mano-de-obra {
+    background-color: var(--color-accent-blue-soft);
+    color: var(--color-accent-blue);
+}
+
+.badge-category.repuesto {
+    background-color: var(--color-warning-soft);
+    color: var(--color-warning-hover);
+}
+
+.badge-category.insumo {
+    background-color: var(--color-success-soft);
+    color: var(--color-success);
+}
+
+/* Semáforos de Auditoría */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.verde, .status-indicator.verde {
+    color: var(--color-success-hover);
+}
+.dot.verde {
+    background-color: var(--color-success);
+    box-shadow: 0 0 6px var(--color-success);
+}
+
+.dot.amarillo, .status-indicator.amarillo {
+    color: var(--color-warning-hover);
+}
+.dot.amarillo {
+    background-color: var(--color-warning);
+    box-shadow: 0 0 6px var(--color-warning);
+}
+
+.dot.rojo, .status-indicator.rojo {
+    color: var(--color-danger-hover);
+}
+.dot.rojo {
+    background-color: var(--color-danger);
+    box-shadow: 0 0 6px var(--color-danger);
+}
+
+/* 8. Botones y Elementos de Acción */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background-color: var(--color-accent-blue);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent-blue-hover);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: var(--color-navy-light);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+    color: var(--color-navy-dark);
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 1.05rem;
+    border-radius: var(--border-radius-md);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* 9. Loader y Pantalla de Carga */
+.audit-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.9);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.audit-loader-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.scanner-box {
+    width: 280px;
+    height: 160px;
+    border: 2px solid var(--color-accent-blue);
+    border-radius: var(--border-radius-md);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 25px;
+    background-color: rgba(30, 41, 59, 0.5);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.scanner-line {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: var(--color-accent-blue);
+    box-shadow: 0 0 10px var(--color-accent-blue), 0 0 20px var(--color-accent-blue);
+    animation: scan 2s linear infinite;
+}
+
+.scanner-grid {
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.loader-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.loader-subtext {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+@keyframes scan {
+    0% { top: 0; }
+    50% { top: calc(100% - 4px); }
+    100% { top: 0; }
+}
+
+/* 10. Dashboard de Resultados */
+.results-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Resumen Ejecutivo Metrics */
+.metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .metrics-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.metric-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.metric-card.savings-highlight {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-color: var(--color-navy-dark);
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.metric-card.savings-highlight .metric-label {
+    color: #94a3b8;
+}
+
+.metric-val {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-navy-dark);
+    font-family: 'Outfit', sans-serif;
+}
+
+.metric-card.savings-highlight .metric-val {
+    color: #ffffff;
+}
+
+.metric-card.savings-highlight .savings-amount {
+    color: var(--color-success);
+}
+
+/* Bloque Recomendación Destacada */
+.decision-alert {
+    border-radius: var(--border-radius-md);
+    padding: 25px;
+    display: flex;
+    gap: 20px;
+    border: 1px solid transparent;
+}
+
+.decision-alert-aprobado {
+    background-color: var(--color-success-soft);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.decision-alert-revisar {
+    background-color: var(--color-warning-soft);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.decision-alert-rechazado {
+    background-color: var(--color-danger-soft);
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.decision-icon {
+    font-size: 2.2rem;
+    line-height: 1;
+}
+
+.decision-body h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.decision-alert-aprobado h3 { color: #065f46; }
+.decision-alert-revisar h3 { color: #92400e; }
+.decision-alert-rechazado h3 { color: #991b1b; }
+
+.decision-body p {
+    font-size: 0.95rem;
+    color: var(--color-navy-light);
+}
+
+/* 11. Alertas de Interfaz */
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 20px;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background-color: var(--color-success-soft);
+    border-color: rgba(16, 185, 129, 0.2);
+    color: #065f46;
+}
+
+.alert-info {
+    background-color: var(--color-accent-blue-soft);
+    border-color: rgba(59, 130, 246, 0.2);
+    color: #1e3a8a;
+}
+
+.alert-danger {
+    background-color: var(--color-danger-soft);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #991b1b;
+}
+
+.alert-icon {
+    font-size: 1.2rem;
+}
+
+/* 12. Historial de Auditorías Table View */
+.history-table-container {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+/* Logs y Utilidades de carga */
+.logs-container {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 20px;
+    border-radius: var(--border-radius-sm);
+    max-height: 250px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.8rem;
+    border: 1px solid #334155;
+}
+
+.logs-list {
+    list-style: none;
+}
+
+.log-item {
+    margin-bottom: 6px;
+    border-bottom: 1px solid #1e293b;
+    padding-bottom: 4px;
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-item.success { color: #34d399; }
+.log-item.error { color: #f87171; }
+
+.text-center { text-align: center; }
+.margin-top-md { margin-top: 20px; }
+.margin-bottom-md { margin-bottom: 20px; }
+
+/* 13. Animaciones */
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 14. Pie de página */
+.main-footer {
+    text-align: center;
+    padding: 30px 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 40px;
+}
+
+/* Notion Save Badge */
+.notion-save-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    background-color: #f1f5f9;
+    border-radius: 50px;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+}
+
+.notion-save-status.saved {
+    background-color: var(--color-success-soft);
+    color: var(--color-success-hover);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.notion-save-status.not-saved {
+    background-color: var(--color-danger-soft);
+    color: var(--color-danger-hover);
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Demo Notice Area */
+.demo-notice {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: var(--border-radius-md);
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #1e40af;
+}
+
+.demo-notice h3 {
+    color: #1e3a8a;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.demo-notice code {
+    background-color: #dbeafe;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: 600;
+}
+
+/* ============================================================
+   15. RESPONSIVE MÓVIL - Media Queries
+   ============================================================ */
+
+/* Tablet y pantallas medianas (≤ 768px) */
+@media (max-width: 768px) {
+
+    .app-container {
+        padding: 12px;
+    }
+
+    /* Header: apila logo + nav + badge verticalmente */
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px 20px;
+    }
+
+    /* Nav: muestra los links en fila envolvente */
+    .header-nav {
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+
+    /* Badge de conexión: va al final del header */
+    .connection-badge {
+        align-self: flex-start;
+    }
+
+    /* Logo más compacto */
+    .logo-text h1 {
+        font-size: 1.2rem;
+    }
+
+    .logo-text p {
+        font-size: 0.75rem;
+    }
+
+    /* Tabla del tarifario: fuente más pequeña */
+    table {
+        font-size: 0.78rem;
+    }
+
+    th, td {
+        padding: 10px 10px;
+    }
+
+    /* Decision alert en columna en pantallas pequeñas */
+    .decision-alert {
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px;
+    }
+
+    .decision-icon {
+        font-size: 1.8rem;
+    }
+}
+
+/* Móvil pequeño (≤ 480px) */
+@media (max-width: 480px) {
+
+    .app-container {
+        padding: 8px;
+    }
+
+    .main-header {
+        padding: 14px 16px;
+        border-radius: 12px;
+    }
+
+    /* Nav: cada link ocupa su propio espacio */
+    .header-nav {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .nav-link {
+        width: 100%;
+        text-align: center;
+        padding: 8px 12px;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Logo ultra compacto */
+    .logo-icon {
+        font-size: 1.7rem;
+    }
+
+    .logo-text h1 {
+        font-size: 1.05rem;
+    }
+
+    /* Tarjetas sin padding excesivo */
+    .card-header {
+        padding: 16px 16px;
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+
+    /* Input buscador ocupa todo el ancho */
+    #tarifario-search {
+        width: 100% !important;
+        margin-top: 8px;
+    }
+
+    /* Card header del tarifario apila título y buscador */
+    .card-header[style*="justify-content: space-between"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    /* Métricas con números más compactos */
+    .metric-val {
+        font-size: 1.4rem;
+    }
+
+    /* Botón de auditar más alto para ser fácil de tocar */
+    .btn-lg {
+        padding: 16px 20px;
+        font-size: 1rem;
+    }
+
+    /* Footer más pequeño */
+    .main-footer {
+        padding: 20px 0;
+    }
+}
